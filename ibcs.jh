@@ -1,0 +1,62 @@
+@readOnly
+entity Country {
+	countryCode String
+	countryName String
+}
+
+@readOnly
+entity Region {
+	regionCode String
+	regionName String
+}
+
+@readOnly
+entity Currency {
+	currencyCode String
+	currencyName String
+}
+
+entity Tenant {
+	tenantCode String required unique
+    tenantName String required
+    geography String 
+    interSellerSupport Boolean required
+    partnerTenantCode String
+}
+
+entity HostBank {
+	bankCode String required unique
+    bankName String required
+    partyRole String required
+    branchCode String required
+    branchName String required
+    timeZone String required
+    hostBankFiId String
+    partnerBankFiId String
+    contactPerson String required 
+    emailId String required maxlength(100) pattern(/[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}/)
+    mobileNumber String required maxlength(100)
+    clientAppId String maxlength(48)
+    clientAppName String maxlength(128)
+    clientKey String maxlength(2048)
+    addressLine1 String required maxlength(35)
+    addressLine2 String maxlength(35)
+    addressLine3 String maxlength(35)
+    addressLine4 String maxlength(35)
+    addressLine5 String maxlength(35)
+    addressLine6 String maxlength(35)
+    addressLine7 String maxlength(35)
+}
+
+entity BankIdentifier {
+    bank HostBank
+	identifierType String required maxlength(100)
+    identifierCode String required maxlength(100)
+}
+
+relationship OneToMany {
+	Tenant{tenantCode} to HostBank
+    Country{countryCode} to HostBank
+    Currency{countryCode} to HostBank{baseCurrencyCode}
+    Region{regionCode} to HostBank
+}
